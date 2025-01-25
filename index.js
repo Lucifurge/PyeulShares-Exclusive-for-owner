@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let shares = parseFloat(document.getElementById("shares").value);
 
         // Ensure shares are within the 1-1 million range
-        shares = Math.max(1, Math.min(shares, 1000000));
+        shares = Math.max(1, Math.min(shares, 10000000));
         // Ensure interval is not too low to avoid issues
         interval = Math.max(0.1, interval);
 
