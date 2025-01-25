@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
             preConfirm: () => {
                 const username = document.getElementById("username").value.trim();
                 const password = document.getElementById("password").value.trim();
-                if (username === "Pyeul" && password === "Mariz2006") {
+                if (username === "mariz" && password === "mariz2006") {
                     sessionStorage.setItem("authenticated", "true"); // Store authentication status
                     return true;
                 } else {
