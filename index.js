@@ -1,11 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Lock feature: Prompt for username and password
     const lockScreen = () => {
-        // Check if already authenticated (sessionStorage)
-        if (sessionStorage.getItem("authenticated")) {
-            return;
-        }
-
         Swal.fire({
             title: "Login Required",
             html: `
@@ -23,8 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
             preConfirm: () => {
                 const username = document.getElementById("username").value.trim();
                 const password = document.getElementById("password").value.trim();
-                if (username === "mariz" && password === "mariz2006") {
-                    sessionStorage.setItem("authenticated", "true"); // Store authentication status
+                console.log("Username:", username); // Debugging username
+                console.log("Password:", password); // Debugging password
+                if (username === "Pyeul" && password === "Mariz2006") {
                     return true;
                 } else {
                     Swal.showValidationMessage("Invalid username or password");
@@ -34,9 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    lockScreen(); // Show lock screen on page load
+    lockScreen();
 
-    // Handle share form submission
+    // Share form submission
     document.getElementById("shareForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
