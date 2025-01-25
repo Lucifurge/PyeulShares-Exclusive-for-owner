@@ -10,8 +10,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Disable right-click and common devtools shortcuts
+        document.addEventListener("contextmenu", (e) => e.preventDefault());
+        document.addEventListener("keydown", (e) => {
+            if (
+                e.ctrlKey &&
+                (e.key === "u" || e.key === "s" || e.key === "i" || e.key === "j")
+            ) {
+                e.preventDefault();
+            }
+        });
+        // Deterrent console log
+        console.log("%cStop!", "color: red; font-size: 24px;");
+        console.log(
+            "This area is for developers. Proceeding could result in unintended consequences."
+        );
+    </script>
     <style>
-        /* General Body Styling */
         body {
             background-color: #ffe4e6;
             color: #4f2a3c;
@@ -22,7 +38,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated Hearts */
         .heart {
             position: fixed;
             animation: floatUp 5s infinite ease-in-out;
@@ -42,7 +57,6 @@
             }
         }
 
-        /* Navbar Styling */
         .navbar {
             background: linear-gradient(90deg, #ffa6c1, #ff79c6, #ffa6c1);
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
@@ -85,7 +99,6 @@
             transform: scale(1.1);
         }
 
-        /* Hero Section Styling */
         .hero {
             text-align: center;
             padding: 100px 20px;
@@ -112,7 +125,6 @@
             margin-top: 20px;
         }
 
-        /* Footer Styling */
         .footer {
             background: linear-gradient(90deg, #ff79c6, #ffa6c1);
             color: #ffffff;
