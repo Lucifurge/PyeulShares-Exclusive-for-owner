@@ -121,12 +121,15 @@
                 <div class="modal-body">
                     <form id="authForm">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" required>
+                            <label for="usernameField" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="usernameField" required>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" required>
+                            <label for="passwordField" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="passwordField" required>
+                            <div class="mt-2">
+                                <input type="checkbox" id="showPassword"> Show Password
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Unlock</button>
                     </form>
