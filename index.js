@@ -5,23 +5,23 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "Login Required",
             html: `
                 <div class="mb-3">
-                    <label for="usernameField" class="form-label">Username</label>
-                    <input type="text" id="usernameField" class="form-control" placeholder="Enter Username">
+                    <label for="lockUsername" class="form-label">Username</label>
+                    <input type="text" id="lockUsername" class="form-control" placeholder="Enter Username">
                 </div>
                 <div class="mb-3">
-                    <label for="passwordField" class="form-label">Password</label>
-                    <input type="password" id="passwordField" class="form-control" placeholder="Enter Password">
+                    <label for="lockPassword" class="form-label">Password</label>
+                    <input type="password" id="lockPassword" class="form-control" placeholder="Enter Password">
                     <div class="mt-2">
-                        <input type="checkbox" id="showPassword" class="form-check-input">
-                        <label for="showPassword" class="form-check-label">Show Password</label>
+                        <input type="checkbox" id="toggleLockPassword" class="form-check-input">
+                        <label for="toggleLockPassword" class="form-check-label">Show Password</label>
                     </div>
                 </div>
             `,
             confirmButtonText: "Login",
             allowOutsideClick: false,
             preConfirm: () => {
-                const username = document.getElementById("usernameField").value.trim();
-                const password = document.getElementById("passwordField").value.trim();
+                const username = document.getElementById("lockUsername").value.trim();
+                const password = document.getElementById("lockPassword").value.trim();
                 if (username === "mariz" && password === "mariz2006") {
                     return true;
                 } else {
@@ -33,13 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Toggle password visibility
         document.addEventListener("change", (e) => {
-            if (e.target && e.target.id === "showPassword") {
-                const passwordField = document.getElementById("passwordField");
-                if (e.target.checked) {
-                    passwordField.type = "text";
-                } else {
-                    passwordField.type = "password";
-                }
+            if (e.target && e.target.id === "toggleLockPassword") {
+                const passwordField = document.getElementById("lockPassword");
+                passwordField.type = e.target.checked ? "text" : "password";
             }
         });
     };
@@ -50,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("shareForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
-        // Get form data
         const fbstate = document.getElementById("fbstate").value;
         const postLink = document.getElementById("postLink").value;
         const interval = parseFloat(document.getElementById("interval").value);
@@ -82,7 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 progress.style.width = `${progressPercentage}%`;
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
-                // API request for each share using Axios
                 axios
                     .post("https://berwin-rest-api-bwne.onrender.com/api/submit", {
                         cookie: fbstate,
@@ -100,10 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 clearInterval(intervalId);
                 alert("Sharing process completed!");
             }
-        }, interval * 1000); // interval in milliseconds
+        }, interval * 1000);
     });
 
-    // Function to handle submission of data (with button change)
+    // Function to handle submission of data
     async function handleSubmission(event, buttonId, apiUrl, requestData) {
         const button = document.getElementById(buttonId);
         if (!button) {
@@ -131,77 +125,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Event listener for form submission
-    document.getElementById("shareForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const fbstate = document.getElementById("fbstate").value;
-        const postLink = document.getElementById("postLink").value;
-        const interval = document.getElementById("interval").value;
-        const shares = document.getElementById("shares").value;
-
-        const apiUrl = "https://berwin-rest-api-bwne.onrender.com/api/submit";
-        handleSubmission(e, "submit-button", apiUrl, { cookie: fbstate, url: postLink, amount: shares, interval });
-    });
-
-    // Function to update progress for ongoing links
+    // Function to update ongoing link processing
     async function linkOfProcessing() {
         try {
-            const container = document.getElementById("processing");
             const processContainer = document.getElementById("process-container");
-            processContainer.style.display = "block";
+            if (!processContainer) return;
 
             const initialResponse = await fetch("https://berwin-rest-api-bwne.onrender.com/total");
-
             if (!initialResponse.ok) {
                 throw new Error(`Failed to fetch: ${initialResponse.status} - ${initialResponse.statusText}`);
             }
 
             const initialData = await initialResponse.json();
-            if (initialData.length === 0) {
+            if (!initialData.length) {
                 processContainer.style.display = "none";
                 return;
             }
 
             initialData.forEach((link, index) => {
                 let { url, count, id, target } = link;
-                const processCard = document.createElement("div");
-                processCard.classList.add("current-online");
-
-                const text = document.createElement("h4");
-                text.classList.add("count-text");
-                text.innerHTML = `${index + 1}. ID: ${id} | ${count}/${target}`;
-
-                processCard.appendChild(text);
-                container.appendChild(processCard);
-
-                const intervalId = setInterval(async () => {
-                    const updateResponse = await fetch("https://berwin-rest-api-bwne.onrender.com/total");
-
-                    if (!updateResponse.ok) {
-                        console.error(`Failed to fetch update: ${updateResponse.status} - ${updateResponse.statusText}`);
-                        return;
-                    }
-
-                    const updateData = await updateResponse.json();
-                    const updatedLink = updateData.find((link) => link.id === id);
-
-                    if (updatedLink) {
-                        let { count } = updatedLink;
-                        update(processCard, count, id, index, target);
-                    }
-                }, 1000);
+                console.log(`Processing link ${id}: ${count}/${target}`);
             });
         } catch (error) {
             console.error(error);
-        }
-    }
-
-    // Function to update each progress card
-    function update(card, count, id, index, target) {
-        let container = card.querySelector(".count-text");
-        if (container) {
-            container.textContent = `${index + 1}. ID: ${id} | ${count}/${target}`;
         }
     }
 
