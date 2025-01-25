@@ -164,6 +164,51 @@
         .btn-primary:focus {
             box-shadow: 0 0 0 0.2rem rgba(255, 121, 198, 0.5);
         }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 767px) {
+            .navbar-left {
+                text-align: center;
+                padding: 1rem;
+                font-size: 1.5rem;
+            }
+
+            .navbar-nav .nav-link {
+                margin: 0 8px;
+                font-size: 1rem;
+            }
+
+            .hero {
+                padding: 50px 10px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .footer {
+                padding: 10px;
+            }
+
+            .btn-primary {
+                width: 100%;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 
