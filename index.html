@@ -11,18 +11,40 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* General Body Styling */
         body {
-            background-color: #2e1d2f;
-            color: #ffffff;
+            background-color: #ffe4e6;
+            color: #4f2a3c;
             font-family: "Fira Code", monospace;
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            transition: background 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
         }
 
+        /* Animated Hearts */
+        .heart {
+            position: fixed;
+            animation: floatUp 5s infinite ease-in-out;
+            color: #ff79c6;
+            font-size: 2rem;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Navbar Styling */
         .navbar {
-            background: linear-gradient(90deg, #8b1c61, #5a1c3b);
+            background: linear-gradient(90deg, #ffa6c1, #ff79c6, #ffa6c1);
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
             padding: 0.8rem 1.5rem;
         }
@@ -30,45 +52,11 @@
         .navbar-brand {
             font-weight: bold;
             font-size: 1.8rem;
-            background: linear-gradient(90deg, #ff79c6, #ff9fd6, #ff6fae, #ff79c6);
+            background: linear-gradient(90deg, #ff79c6, #ffb2d9, #ffa6c1, #ff79c6);
             background-size: 400% 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: rainbow-pink 6s ease infinite;
-        }
-
-        .navbar-nav .nav-link {
-            color: #f8d2e2 !important;
-            font-weight: bold;
-            margin: 0 12px;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #ff9fd6 !important;
-            transform: scale(1.1);
-        }
-
-        .hero {
-            text-align: center;
-            padding: 100px 20px;
-            background: linear-gradient(180deg, rgba(46, 29, 47, 0.95), rgba(32, 21, 34, 0.95));
-            border-radius: 15px;
-            color: white;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            margin-top: 1rem;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, #ff79c6, #ff9fd6, #ff6fae, #ff79c6);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rainbow-pink 6s ease infinite;
-            text-shadow: 0 0 15px rgba(255, 121, 198, 0.6), 0 0 30px rgba(255, 111, 174, 0.6);
         }
 
         @keyframes rainbow-pink {
@@ -85,58 +73,73 @@
             }
         }
 
-        #authModal .modal-content {
-            background-color: #2f1d30;
-            color: #f8d2e2;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        .navbar-nav .nav-link {
+            color: #fff7f9 !important;
+            font-weight: bold;
+            margin: 0 12px;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
 
-        #authModal .form-control {
-            background: #3a273a;
-            color: #f8d2e2;
-            border: 1px solid #5a3a5a;
+        .navbar-nav .nav-link:hover {
+            color: #ffe0ea !important;
+            transform: scale(1.1);
         }
 
-        #authModal .btn-primary {
-            background: #ff79c6;
-            border-color: #ff79c6;
+        /* Hero Section Styling */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(180deg, rgba(255, 236, 242, 0.95), rgba(255, 218, 228, 0.95));
+            border-radius: 15px;
+            color: #4f2a3c;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 2rem;
         }
 
-        #authModal .btn-primary:hover {
-            background: #ff6fae;
-            border-color: #ff6fae;
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #ff79c6, #ffa6c1, #ff79c6);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-pink 6s ease infinite;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+        /* Footer Styling */
+        .footer {
+            background: linear-gradient(90deg, #ff79c6, #ffa6c1);
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #ffb2d9;
+        }
+
+        .footer a {
+            color: #ffe0ea;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #ff79c6;
         }
     </style>
 </head>
 
 <body>
-    <!-- Authentication Modal -->
-    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="authModalLabel">Authentication Required</h5>
-                </div>
-                <div class="modal-body">
-                    <form id="authForm">
-                        <div class="mb-3">
-                            <label for="usernameField" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="usernameField" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="passwordField" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwordField" required>
-                            <div class="mt-2">
-                                <input type="checkbox" id="showPassword"> Show Password
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Unlock</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Animated Hearts -->
+    <span class="heart" style="left: 10%; animation-delay: 0s;">❤️</span>
+    <span class="heart" style="left: 30%; animation-delay: 1s;">💖</span>
+    <span class="heart" style="left: 50%; animation-delay: 2s;">💕</span>
+    <span class="heart" style="left: 70%; animation-delay: 3s;">💞</span>
+    <span class="heart" style="left: 90%; animation-delay: 4s;">💘</span>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -156,9 +159,9 @@
 
     <!-- Hero Section -->
     <header class="hero">
-        <h1>Pyeulshares</h1>
+        <h1>Welcome, Pyeul!</h1>
         <p>Effortlessly share your posts with our automated tool!</p>
-        <a href="#share" class="btn">Get Started</a>
+        <a href="#share" class="btn btn-primary">Get Started</a>
     </header>
 
     <!-- Share Form -->
@@ -189,8 +192,6 @@
     <footer class="footer">
         <p>&copy; 2025 Pyeulshares. All Rights Reserved. Made By The Husband of Pyeul Lihm</p>
     </footer>
-
-    <script src="index.js"></script>
 </body>
 
 </html>
