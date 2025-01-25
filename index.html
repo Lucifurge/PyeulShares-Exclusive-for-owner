@@ -10,24 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        // Disable right-click and common devtools shortcuts
-        document.addEventListener("contextmenu", (e) => e.preventDefault());
-        document.addEventListener("keydown", (e) => {
-            if (
-                e.ctrlKey &&
-                (e.key === "u" || e.key === "s" || e.key === "i" || e.key === "j")
-            ) {
-                e.preventDefault();
-            }
-        });
-        // Deterrent console log
-        console.log("%cStop!", "color: red; font-size: 24px;");
-        console.log(
-            "This area is for developers. Proceeding could result in unintended consequences."
-        );
-    </script>
     <style>
+        /* General Body Styling */
         body {
             background-color: #ffe4e6;
             color: #4f2a3c;
@@ -38,6 +22,7 @@
             overflow-x: hidden;
         }
 
+        /* Animated Hearts */
         .heart {
             position: fixed;
             animation: floatUp 5s infinite ease-in-out;
@@ -57,9 +42,29 @@
             }
         }
 
+        /* Navbar Styling */
         .navbar {
             background: linear-gradient(90deg, #ffa6c1, #ff79c6, #ffa6c1);
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 0.8rem 1.5rem;
+        }
+
+        .navbar .navbar-nav {
+            flex-grow: 1;
+            justify-content: flex-end;
+        }
+
+        .navbar-left {
+            background-color: #ff79c6;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .navbar-right {
+            background-color: transparent;
+            color: white;
             padding: 0.8rem 1.5rem;
         }
 
@@ -99,6 +104,7 @@
             transform: scale(1.1);
         }
 
+        /* Hero Section Styling */
         .hero {
             text-align: center;
             padding: 100px 20px;
@@ -125,6 +131,7 @@
             margin-top: 20px;
         }
 
+        /* Footer Styling */
         .footer {
             background: linear-gradient(90deg, #ff79c6, #ffa6c1);
             color: #ffffff;
@@ -142,6 +149,21 @@
         .footer a:hover {
             color: #ff79c6;
         }
+
+        /* Pink Buttons */
+        .btn-primary {
+            background-color: #ff79c6;
+            border-color: #ff79c6;
+        }
+
+        .btn-primary:hover {
+            background-color: #ffb2d9;
+            border-color: #ffb2d9;
+        }
+
+        .btn-primary:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 121, 198, 0.5);
+        }
     </style>
 </head>
 
@@ -155,8 +177,8 @@
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="navbar-left">Pyeulshares</div>
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Pyeulshares</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
