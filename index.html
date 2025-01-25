@@ -12,6 +12,17 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* General Body Styling */
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            width: 100%;
+        }
+
         body {
             background-color: #ffe4e6;
             color: #4f2a3c;
@@ -47,6 +58,7 @@
             background: linear-gradient(90deg, #ffa6c1, #ff79c6, #ffa6c1);
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
             padding: 0.8rem 1.5rem;
+            width: 100%;
         }
 
         .navbar .navbar-nav {
@@ -219,7 +231,6 @@
     <span class="heart" style="left: 50%; animation-delay: 2s;">💕</span>
     <span class="heart" style="left: 70%; animation-delay: 3s;">💞</span>
     <span class="heart" style="left: 90%; animation-delay: 4s;">💘</span>
-    <span class="heart" style="left: 90%; animation-delay: 4s;">🎀</span>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
