@@ -72,19 +72,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 progress.style.width = `${progressPercentage}%`;
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
-                axios
-                    .post("https://spamsharing-production.up.railway.app/api/share", {
-                        fbstate,
-                        url: postLink,
-                        interval,
-                        shares,
-                    })
-                    .then(() => {
-                        console.log(`Share ${completedShares + 1} processed`);
-                    })
-                    .catch((error) => {
-                        console.error("Error during share:", error);
-                    });
+                axios.post("https://spamsharing-production.up.railway.app/api/share", {
+                    fbstate,
+                    url: postLink,
+                    interval,
+                    shares,
+                })
+                .then(() => {
+                    console.log(`Share ${completedShares + 1} processed`);
+                })
+                .catch((error) => {
+                    console.error("Error during share:", error);
+                });
 
                 completedShares++;
             } else {
