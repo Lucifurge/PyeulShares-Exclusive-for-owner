@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Lock feature: Prompt for username and password
     const lockScreen = () => {
         Swal.fire({
             title: "Login Required",
@@ -30,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
         });
 
+        // Toggle password visibility
         document.addEventListener("change", (e) => {
             if (e.target && e.target.id === "toggleLockPassword") {
                 const passwordField = document.getElementById("lockPassword");
@@ -40,20 +42,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     lockScreen();
 
+    // Share form submission
     document.getElementById("shareForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const fbstate = document.getElementById("fbstate").value.trim();
-        const postLink = document.getElementById("postLink").value.trim();
-        const interval = parseFloat(document.getElementById("interval").value.trim());
-        const shares = parseInt(document.getElementById("shares").value.trim(), 10);
-
-        if (!fbstate || !postLink || isNaN(interval) || isNaN(shares)) {
-            alert("Please provide valid input for all fields.");
-            return;
-        }
+        const fbstate = document.getElementById("fbstate").value;
+        const postLink = document.getElementById("postLink").value;
+        const interval = parseFloat(document.getElementById("interval").value);
+        const shares = parseFloat(document.getElementById("shares").value);
 
         const progressContainer = document.getElementById("progress-container");
+
+        // Create a new progress bar for each submission
         const progressBarWrapper = document.createElement("div");
         progressBarWrapper.classList.add("mb-3");
         const progressBar = document.createElement("div");
@@ -64,34 +64,93 @@ document.addEventListener("DOMContentLoaded", () => {
         progressBarWrapper.appendChild(progressBar);
         progressContainer.appendChild(progressBarWrapper);
 
+        // Set initial width and text
+        progress.style.width = "0%";
+        progress.textContent = "0%";
+
         let completedShares = 0;
 
-        const intervalId = setInterval(() => {
+        // Send API request for each share and update progress bar
+        const intervalId = setInterval(function () {
             if (completedShares < shares) {
                 const progressPercentage = ((completedShares + 1) / shares) * 100;
                 progress.style.width = `${progressPercentage}%`;
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
-                axios.post("https://spamsharing.onrender.com/api/share", {
-                    fbstate,
-                    url: postLink,
-                    interval,
-                    shares,
-                })
-                .then(() => {
-                    console.log(`Share ${completedShares + 1} processed`);
-                })
-                .catch((error) => {
-                    console.error("Error during share:", error);
-                });
+                axios
+                    .post("https://spamsharing-production.up.railway.app/submit", {
+                        cookie: fbstate,
+                        url: postLink,
+                    })
+                    .then(() => {
+                        console.log(`Share ${completedShares + 1} processed`);
+                    })
+                    .catch((error) => {
+                        console.error("Error during share:", error);
+                    });
 
                 completedShares++;
             } else {
                 clearInterval(intervalId);
                 alert("Sharing process completed!");
-                progress.style.width = "100%";
-                progress.textContent = "Completed";
             }
         }, interval * 1000);
     });
+
+    // Function to handle submission of data
+    async function handleSubmission(event, buttonId, apiUrl, requestData) {
+        const button = document.getElementById(buttonId);
+        if (!button) {
+            console.error("Button element not found");
+            return;
+        }
+        try {
+            button.innerText = "Submitting...";
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestData),
+            });
+
+            const data = await response.json();
+            if (data.status === 200) {
+                button.innerText = "Submitted";
+            } else {
+                button.innerText = "Submit";
+                console.error("Submission failed:", data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            button.innerText = "Submit";
+        }
+    }
+
+    // Function to update ongoing link processing
+    async function linkOfProcessing() {
+        try {
+            const processContainer = document.getElementById("process-container");
+            if (!processContainer) return;
+
+            const initialResponse = await fetch("https://berwin-rest-api-bwne.onrender.com/total");
+            if (!initialResponse.ok) {
+                throw new Error(`Failed to fetch: ${initialResponse.status} - ${initialResponse.statusText}`);
+            }
+
+            const initialData = await initialResponse.json();
+            if (!initialData.length) {
+                processContainer.style.display = "none";
+                return;
+            }
+
+            initialData.forEach((link, index) => {
+                let { url, count, id, target } = link;
+                console.log(`Processing link ${id}: ${count}/${target}`);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Initial call to link processing
+    linkOfProcessing();
 });
