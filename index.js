@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 progress.style.width = `${progressPercentage}%`;
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
-                axios.post("https://spamsharing-production.up.railway.app/api/share", {
+                axios.post("https://spamsharing.onrender.com/api/share", {
                     fbstate,
                     url: postLink,
                     interval,
