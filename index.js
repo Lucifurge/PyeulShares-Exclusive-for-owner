@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
                 axios
-                    .post("https://spamsharing-production.up.railway.app/submit", {
+                    .post("https://berwin-rest-api-bwne.onrender.com/submit", {
                         cookie: fbstate,
                         url: postLink,
                     })
