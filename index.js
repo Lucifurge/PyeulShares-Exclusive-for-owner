@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const progressContainer = document.getElementById("progress-container");
+        progressContainer.style.display = "block"; // Show progress container
 
         // Create a new progress bar for each submission
         const progressBarWrapper = document.createElement("div");
@@ -98,12 +99,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log(`Share ${completedShares + 1} processed`);
                 } catch (error) {
                     console.error("Error during share:", error);
+                    // Keep the process running, don't show error to the user
                 }
 
                 completedShares++;
             } else {
                 clearInterval(intervalId);
-                alert("Sharing process completed!");
+                Swal.fire({
+                    title: "Completed",
+                    text: "Sharing process completed!",
+                    icon: "success",
+                    confirmButtonColor: "#0061ff",
+                    confirmButtonText: "OK"
+                });
+                progressContainer.style.display = "none"; // Hide progress container when done
             }
         }, interval * 1000);
     });
