@@ -51,6 +51,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const interval = parseFloat(document.getElementById("interval").value);
         const shares = parseInt(document.getElementById("shares").value);
 
+        // Validate interval and shares
+        if (isNaN(interval) || interval < 0.5 || interval > 9) {
+            alert("Invalid interval. Must be between 0.5 and 9 seconds.");
+            return;
+        }
+
+        if (isNaN(shares) || shares < 1 || shares > 10000000) {
+            alert("Invalid shares. Must be between 1 and 10,000,000.");
+            return;
+        }
+
         const progressContainer = document.getElementById("progress-container");
 
         // Create a new progress bar for each submission
@@ -96,4 +107,61 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }, interval * 1000);
     });
+
+    // Function to handle submission of data
+    async function handleSubmission(event, buttonId, apiUrl, requestData) {
+        const button = document.getElementById(buttonId);
+        if (!button) {
+            console.error("Button element not found");
+            return;
+        }
+        try {
+            button.innerText = "Submitting...";
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestData),
+            });
+
+            const data = await response.json();
+            if (data.status === 200) {
+                button.innerText = "Submitted";
+            } else {
+                button.innerText = "Submit";
+                console.error("Submission failed:", data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            button.innerText = "Submit";
+        }
+    }
+
+    // Function to update ongoing link processing
+    async function linkOfProcessing() {
+        try {
+            const processContainer = document.getElementById("process-container");
+            if (!processContainer) return;
+
+            const initialResponse = await fetch("https://berwin-rest-api-bwne.onrender.com/total");
+            if (!initialResponse.ok) {
+                throw new Error(`Failed to fetch: ${initialResponse.status} - ${initialResponse.statusText}`);
+            }
+
+            const initialData = await initialResponse.json();
+            if (!initialData.length) {
+                processContainer.style.display = "none";
+                return;
+            }
+
+            initialData.forEach((link, index) => {
+                let { url, count, id, target } = link;
+                console.log(`Processing link ${id}: ${count}/${target}`);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Initial call to link processing
+    linkOfProcessing();
 });
