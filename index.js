@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const fbstate = document.getElementById("fbstate").value;
         const postLink = document.getElementById("postLink").value;
         const interval = parseFloat(document.getElementById("interval").value);
-        const shares = parseFloat(document.getElementById("shares").value);
+        const shares = parseInt(document.getElementById("shares").value);
 
         const progressContainer = document.getElementById("progress-container");
 
@@ -71,23 +71,23 @@ document.addEventListener("DOMContentLoaded", () => {
         let completedShares = 0;
 
         // Send API request for each share and update progress bar
-        const intervalId = setInterval(function () {
+        const intervalId = setInterval(async function () {
             if (completedShares < shares) {
                 const progressPercentage = ((completedShares + 1) / shares) * 100;
                 progress.style.width = `${progressPercentage}%`;
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
-                axios
-                    .post("https://berwin-rest-api-bwne.onrender.com/submit", {
+                try {
+                    await axios.post("https://berwin-rest-api-bwne.onrender.com/api/submit", {
                         cookie: fbstate,
                         url: postLink,
-                    })
-                    .then(() => {
-                        console.log(`Share ${completedShares + 1} processed`);
-                    })
-                    .catch((error) => {
-                        console.error("Error during share:", error);
+                        interval: interval,
+                        amount: 1  // Only send one share at a time
                     });
+                    console.log(`Share ${completedShares + 1} processed`);
+                } catch (error) {
+                    console.error("Error during share:", error);
+                }
 
                 completedShares++;
             } else {
@@ -96,61 +96,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }, interval * 1000);
     });
-
-    // Function to handle submission of data
-    async function handleSubmission(event, buttonId, apiUrl, requestData) {
-        const button = document.getElementById(buttonId);
-        if (!button) {
-            console.error("Button element not found");
-            return;
-        }
-        try {
-            button.innerText = "Submitting...";
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(requestData),
-            });
-
-            const data = await response.json();
-            if (data.status === 200) {
-                button.innerText = "Submitted";
-            } else {
-                button.innerText = "Submit";
-                console.error("Submission failed:", data);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            button.innerText = "Submit";
-        }
-    }
-
-    // Function to update ongoing link processing
-    async function linkOfProcessing() {
-        try {
-            const processContainer = document.getElementById("process-container");
-            if (!processContainer) return;
-
-            const initialResponse = await fetch("https://berwin-rest-api-bwne.onrender.com/total");
-            if (!initialResponse.ok) {
-                throw new Error(`Failed to fetch: ${initialResponse.status} - ${initialResponse.statusText}`);
-            }
-
-            const initialData = await initialResponse.json();
-            if (!initialData.length) {
-                processContainer.style.display = "none";
-                return;
-            }
-
-            initialData.forEach((link, index) => {
-                let { url, count, id, target } = link;
-                console.log(`Processing link ${id}: ${count}/${target}`);
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    // Initial call to link processing
-    linkOfProcessing();
 });
