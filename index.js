@@ -96,10 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         interval: interval,
                         amount: 1  // Only send one share at a time
                     });
-                    console.log(`Share ${completedShares + 1} processed`);
                 } catch (error) {
-                    console.error("Error during share:", error);
-                    // Keep the process running, don't show error to the user
+                    // Error handling without logging to the console
                 }
 
                 completedShares++;
@@ -121,7 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     async function handleSubmission(event, buttonId, apiUrl, requestData) {
         const button = document.getElementById(buttonId);
         if (!button) {
-            console.error("Button element not found");
             return;
         }
         try {
@@ -137,10 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 button.innerText = "Submitted";
             } else {
                 button.innerText = "Submit";
-                console.error("Submission failed:", data);
             }
         } catch (error) {
-            console.error("Error:", error);
             button.innerText = "Submit";
         }
     }
@@ -167,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log(`Processing link ${id}: ${count}/${target}`);
             });
         } catch (error) {
-            console.error(error);
+            // Silent error handling
         }
     }
 
