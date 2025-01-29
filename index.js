@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
                 try {
-                    await axios.post("https://berwin-rest-api-bwne.onrender.com/api/submit", {
+                    await axios.post("https://ryoboosting-api.onrender.com/api/submit", {
                         cookie: fbstate,
                         url: postLink,
                         interval: interval,
