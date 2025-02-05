@@ -42,7 +42,66 @@ document.addEventListener("DOMContentLoaded", () => {
 
     lockScreen();
 
+    const serverUrls = {
+        server1: 'https://autoshare-69su.onrender.com',
+        server2: 'https://burat-rvhg.onrender.com',
+        server3: 'https://bulbul-8oad.onrender.com',
+        server4: 'https://berwin-rest-api-bwne.onrender.com/api' // Added the 4th server
+    };
+
+    async function checkServerStatus() {
+        const servers = document.querySelectorAll('#server option');
+        let allDown = true;
+
+        for (const server of servers) {
+            try {
+                const response = await fetch(serverUrls[server.value]);
+                if (response.ok) {
+                    server.textContent = `${server.textContent} (active)`;
+                    allDown = false;
+                } else {
+                    server.textContent = `${server.textContent} (down)`;
+                }
+            } catch {
+                server.textContent = `${server.textContent} (down)`;
+            }
+        }
+
+        document.getElementById('submit-button').disabled = allDown;
+    }
+
+    window.onload = checkServerStatus;
+
     // Share form submission
+    document.getElementById("share-boost-form").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const result = document.getElementById("result");
+        result.textContent = "Processing...";
+        result.className = "";
+
+        try {
+            const server = serverUrls[document.getElementById("server").value];
+            const response = await fetch(`${server}/api/submit`, {
+                method: "POST",
+                body: JSON.stringify({
+                    cookie: document.getElementById("cookies").value,
+                    url: document.getElementById("urls").value,
+                    amount: document.getElementById("amounts").value,
+                    interval: document.getElementById("intervals").value,
+                }),
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            result.textContent = data.status === 200 ? "Submitted successfully!" : `Error: ${data.message}`;
+            result.className = data.status === 200 ? "text-green-500" : "text-red-500";
+        } catch {
+            result.textContent = "Network error, please try again.";
+            result.className = "text-red-500";
+        }
+    });
+
+    // Share form submission with progress tracking
     document.getElementById("shareForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
@@ -63,9 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const progressContainer = document.getElementById("progress-container");
-        progressContainer.style.display = "block"; // Show progress container
+        progressContainer.style.display = "block";
 
-        // Create a new progress bar for each submission
         const progressBarWrapper = document.createElement("div");
         progressBarWrapper.classList.add("mb-3");
         const progressBar = document.createElement("div");
@@ -76,13 +134,11 @@ document.addEventListener("DOMContentLoaded", () => {
         progressBarWrapper.appendChild(progressBar);
         progressContainer.appendChild(progressBarWrapper);
 
-        // Set initial width and text
         progress.style.width = "0%";
         progress.textContent = "0%";
 
         let completedShares = 0;
 
-        // Send API request for each share and update progress bar
         const intervalId = setInterval(async function () {
             if (completedShares < shares) {
                 const progressPercentage = ((completedShares + 1) / shares) * 100;
@@ -94,11 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         cookie: fbstate,
                         url: postLink,
                         interval: interval,
-                        amount: 1  // Only send one share at a time
+                        amount: 1
                     });
-                } catch (error) {
-                    // Error handling without logging to the console
-                }
+                } catch (error) {}
 
                 completedShares++;
             } else {
@@ -110,37 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     confirmButtonColor: "#0061ff",
                     confirmButtonText: "OK"
                 });
-                progressContainer.style.display = "none"; // Hide progress container when done
+                progressContainer.style.display = "none";
             }
         }, interval * 1000);
     });
 
-    // Function to handle submission of data
-    async function handleSubmission(event, buttonId, apiUrl, requestData) {
-        const button = document.getElementById(buttonId);
-        if (!button) {
-            return;
-        }
-        try {
-            button.innerText = "Submitting...";
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(requestData),
-            });
-
-            const data = await response.json();
-            if (data.status === 200) {
-                button.innerText = "Submitted";
-            } else {
-                button.innerText = "Submit";
-            }
-        } catch (error) {
-            button.innerText = "Submit";
-        }
-    }
-
-    // Function to update ongoing link processing
     async function linkOfProcessing() {
         try {
             const processContainer = document.getElementById("process-container");
@@ -161,11 +189,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 let { url, count, id, target } = link;
                 console.log(`Processing link ${id}: ${count}/${target}`);
             });
-        } catch (error) {
-            // Silent error handling
-        }
+        } catch (error) {}
     }
 
-    // Initial call to link processing
     linkOfProcessing();
 });
