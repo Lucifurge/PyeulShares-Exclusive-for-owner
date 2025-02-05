@@ -255,7 +255,7 @@
         <a href="#share" class="btn btn-primary">Get Started</a>
     </header>
 
-    <!-- Share Form -->
+     <!-- Share Form -->
     <section id="share" class="container">
         <form id="shareForm">
             <div class="mb-3">
@@ -273,6 +273,15 @@
             <div class="mb-3">
                 <label for="shares" class="form-label">Shares</label>
                 <input type="number" class="form-control" id="shares" min="1" max="10000000" required>
+            </div>
+            <div class="mb-3">
+                <label for="server" class="form-label">Choose Server</label>
+                <select class="form-control" id="server">
+                    <option value="server1">Server 1</option>
+                    <option value="server2">Server 2</option>
+                    <option value="server3">Server 3</option>
+                    <option value="server4">Server 4</option>
+                </select>
             </div>
             <button id="submit-button" type="submit" class="btn btn-primary">Start Sharing</button>
         </form>
