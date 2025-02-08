@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     lockScreen();
 
-    document.getElementById("shareForm").addEventListener("submit", function (e) {
+     document.getElementById("shareForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
         // Get form data
