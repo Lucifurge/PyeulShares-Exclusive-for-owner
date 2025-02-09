@@ -274,6 +274,31 @@
         <p>Effortlessly share your posts with our automated tool!</p>
         <a href="#share" class="btn btn-primary">Get Started</a>
     </header>
+    <div id="lockedModal" class="modal" 
+    style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; 
+           width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); 
+           display: flex; align-items: center; justify-content: center;">
+    
+    <div class="modal-content" 
+         style="background: white; padding: 20px; text-align: center; 
+                border-radius: 10px; width: 300px; max-width: 90%;">
+        
+        <h3>Locked Website</h3>
+        <p>You need to log in to access this page.</p>
+        <button id="loginButton" class="btn" 
+                onclick="redirectToLogin()" 
+                style="background: rgb(204, 130, 253); color: white; 
+                       border: none; padding: 10px 20px; border-radius: 5px;">
+            Login
+        </button>
+    </div>
+</div>
+
+<script>
+function redirectToLogin() {
+    window.location.href = "login.html"; // Change to your actual login page URL
+}
+</script>
 
     <!-- Share Form -->
     <section id="share" class="container">
