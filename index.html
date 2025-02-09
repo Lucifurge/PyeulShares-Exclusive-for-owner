@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* General Body Styling */
         * {
@@ -242,6 +243,19 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                <li class="nav-item" id="profileLink" style="display: none;">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+                <li class="nav-item" id="loginLink" style="display: none;">
+                    <a class="nav-link" href="login.html">Login</a>
+                </li>
+                <li class="nav-item" id="registerLink" style="display: none;">
+                    <a class="nav-link" href="register.html">Register</a>
+                </li>
+                <li class="nav-item" id="logoutLink" style="display: none;">
+                    <a class="nav-link" href="javascript:void(0);" onclick="logout()">Logout</a>
+                </li>
+                
                     <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
                     <li class="nav-item"><a class="nav-link" href="#share">Share Post</a></li>
                     <li class="nav-item">
@@ -290,34 +304,131 @@
         <p>&copy; 2025 Pyeulshares. All Rights Reserved. Made By The Husband of Pyeul Lihm</p>
     </footer>
  <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Invoke the lock screen on page load
-            lockScreen();
-        });
+   <script>   // Initialize Supabase client
+        const supabaseUrl = 'https://ehrwsusgkzerozjnddib.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVocndzdXNna3plcm96am5kZGliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY0Nzk4OTgsImV4cCI6MjA1MjA1NTg5OH0.2gC_pxtLhwrAGA2wR6jvXKuIhNMe_L_IsMWgSa3KKds';
+            const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
+    
+    // Function to check user authentication status
+async function checkAuthStatus() {
+    const { data: { session }, error } = await _supabase.auth.getSession();
+
+    if (error) {
+        console.error('Error fetching session:', error.message);
+        return;
+    }
+
+    if (session && session.user) {
+        document.getElementById('profileLink').style.display = 'block';
+        document.getElementById('logoutLink').style.display = 'block';
+        document.getElementById('loginLink').style.display = 'none';
+        document.getElementById('registerLink').style.display = 'none';
+
+        // Ensure the userEmail field exists before setting its value
+        let userEmailField = document.getElementById('userEmail');
+        if (userEmailField) {
+            userEmailField.value = session.user.email;
+        }
+
+        // Hide the locked modal if the user is logged in
+        document.getElementById('lockedModal').style.display = 'none';
+    } else {
+        document.getElementById('profileLink').style.display = 'none';
+        document.getElementById('logoutLink').style.display = 'none';
+        document.getElementById('loginLink').style.display = 'block';
+        document.getElementById('registerLink').style.display = 'block';
+
+        // Show the locked modal if the user is not logged in
+        document.getElementById('lockedModal').style.display = 'block';
+    }
+}
+
+// Logout function
+async function logout() {
+    await _supabase.auth.signOut();
+    location.reload();
+}
+
+// Run authentication check on page load
+window.onload = checkAuthStatus;
+
+// Function to toggle support form
+function toggleSupportForm() {
+    var form = document.getElementById('supportForm');
+    if (form.classList.contains('visible')) {
+        form.classList.remove('visible');
+        setTimeout(() => { form.style.display = 'none'; }, 300);
+    } else {
+        form.style.display = 'block';
+        setTimeout(() => { form.classList.add('visible'); }, 10);
+    }
+}
+
+// Function to submit support message
+async function submitSupportMessage(event) {
+    event.preventDefault();
+    var email = document.getElementById('userEmail') ? document.getElementById('userEmail').value : '';
+    var message = document.getElementById('message').value;
+
+    console.log('Submitting support message:', { email, message });
+
+    const { data, error } = await _supabase
+        .from('support_messages')
+        .insert([{ email: email, message: message }]);
+
+    if (error) {
+        alert('Error submitting message: ' + error.message);
+        console.error('Error details:', error);
+    } else {
+        alert('Message submitted successfully');
+        if (document.getElementById('userEmail')) document.getElementById('userEmail').value = '';
+        document.getElementById('message').value = '';
+        toggleSupportForm();
+    }
+}
+
+// Modal open and close function
+function openModal() {
+    document.getElementById('featureModal').style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById('featureModal').style.display = "none";
+}
+
+// Function to redirect to login page
+function redirectToLogin() {
+    window.location.href = "login.html";
+}
+
+</script>
+
+    <script>
         const bgUploader = document.getElementById("bgUploader");
-
+        
         bgUploader.addEventListener("change", (event) => {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-
+        
                 reader.onload = (e) => {
                     document.body.style.backgroundImage = `url('${e.target.result}')`;
                     document.body.style.backgroundSize = "cover";
                     document.body.style.backgroundRepeat = "no-repeat";
                     document.body.style.backgroundAttachment = "fixed";
                 };
-
+        
                 reader.onerror = () => {
                     alert("Failed to load the image. Please try again with a valid image.");
                 };
-
+        
                 reader.readAsDataURL(file);
             } else {
                 alert("No file selected. Please select an image.");
             }
         });
+
     </script>
     <script src="index.js"></script>
 </body>
