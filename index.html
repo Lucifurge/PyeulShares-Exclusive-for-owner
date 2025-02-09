@@ -235,14 +235,15 @@
     <span class="heart" style="left: 90%; animation-delay: 4s;">🎀</span>
 
    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Pyeulshares</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Pyeulshares</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item" id="profileLink" style="display: none;">
                     <a class="nav-link" href="profile.html">Profile</a>
                 </li>
@@ -255,18 +256,18 @@
                 <li class="nav-item" id="logoutLink" style="display: none;">
                     <a class="nav-link" href="javascript:void(0);" onclick="logout()">Logout</a>
                 </li>
-                
-                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#share">Share Post</a></li>
-                    <li class="nav-item">
-                        <label class="upload-btn">Change Background
-                            <input type="file" id="bgUploader" class="file-input" accept="image/*" style="display: none;">
-                        </label>
-                    </li>
-                </ul>
-            </div>
+                <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link" href="#share">Share Post</a></li>
+                <li class="nav-item">
+                    <label class="nav-link upload-btn">Change Background
+                        <input type="file" id="bgUploader" class="file-input" accept="image/*" style="display: none;">
+                    </label>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
+
     <!-- Hero Section -->
     <header class="hero">
         <h1>Welcome to PyeulShares Owner Website</h1>
@@ -303,7 +304,6 @@
     <footer class="footer">
         <p>&copy; 2025 Pyeulshares. All Rights Reserved. Made By The Husband of Pyeul Lihm</p>
     </footer>
- <script>
    <script>   // Initialize Supabase client
         const supabaseUrl = 'https://ehrwsusgkzerozjnddib.supabase.co';
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVocndzdXNna3plcm96am5kZGliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY0Nzk4OTgsImV4cCI6MjA1MjA1NTg5OH0.2gC_pxtLhwrAGA2wR6jvXKuIhNMe_L_IsMWgSa3KKds';
