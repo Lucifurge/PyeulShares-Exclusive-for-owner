@@ -370,28 +370,27 @@ function redirectToLogin() {
 }
 </script>
 
- <form id="shareForm">
-            <div class="input-group">
-                <label for="fbstate">Facebook Token</label>
-                <input type="text" id="fbstate" placeholder="Enter your Facebook token">
-            </div>
-            <div class="input-group">
-                <label for="postLink">Post Link</label>
-                <input type="text" id="postLink" placeholder="Enter the post link">
-            </div>
-            <div class="input-group">
-                <label for="interval">Interval (seconds)</label>
-                <input type="number" id="interval" placeholder="Interval in seconds">
-            </div>
-            <div class="input-group">
-                <label for="shares">Number of Shares</label>
-                <input type="number" id="shares" placeholder="Enter number of shares">
-            </div>
-            <button type="submit" class="btn">Start Sharing</button>
-        </form>
-
-        <div id="progress-container"></div>
+<form id="shareForm">
+    <div class="input-group">
+        <label for="fbstate">Facebook Token</label>
+        <input type="text" id="fbstate" placeholder="Enter your Facebook token">
     </div>
+    <div class="input-group">
+        <label for="postLink">Post Link</label>
+        <input type="text" id="postLink" placeholder="Enter the post link">
+    </div>
+    <div class="input-group">
+        <label for="interval">Interval (seconds)</label>
+        <input type="number" id="interval" placeholder="Interval in seconds" step="0.1" min="0.1">
+    </div>
+    <div class="input-group">
+        <label for="shares">Number of Shares</label>
+        <input type="number" id="shares" placeholder="Enter number of shares">
+    </div>
+    <button type="submit" class="btn">Start Sharing</button>
+</form>
+
+<div id="progress-container"></div>
 
 
 
