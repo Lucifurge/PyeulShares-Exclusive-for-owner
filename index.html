@@ -224,6 +224,76 @@
                 font-size: 1.1rem;
             }
         }
+        }
+
+/* Container */
+.container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Heading */
+h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Input Group */
+.input-group {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+}
+
+.input-group input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #007bff;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+/* Progress Bar */
+#progress-container {
+    margin-top: 15px;
+}
     </style>
 </head>
 
@@ -301,14 +371,29 @@ function redirectToLogin() {
 }
 </script>
 
-<form id="shareForm">
-    <input type="text" id="fbstate" placeholder="Facebook Token">
-    <input type="text" id="postLink" placeholder="Post Link">
-    <input type="number" id="interval" placeholder="Interval (seconds)">
-    <input type="number" id="shares" placeholder="Number of Shares">
-    <button type="submit">Start Sharing</button>
-</form>
-<div id="progress-container"></div>
+ <form id="shareForm">
+            <div class="input-group">
+                <label for="fbstate">Facebook Token</label>
+                <input type="text" id="fbstate" placeholder="Enter your Facebook token">
+            </div>
+            <div class="input-group">
+                <label for="postLink">Post Link</label>
+                <input type="text" id="postLink" placeholder="Enter the post link">
+            </div>
+            <div class="input-group">
+                <label for="interval">Interval (seconds)</label>
+                <input type="number" id="interval" placeholder="Interval in seconds">
+            </div>
+            <div class="input-group">
+                <label for="shares">Number of Shares</label>
+                <input type="number" id="shares" placeholder="Enter number of shares">
+            </div>
+            <button type="submit" class="btn">Start Sharing</button>
+        </form>
+
+        <div id="progress-container"></div>
+    </div>
+
 
 
 
