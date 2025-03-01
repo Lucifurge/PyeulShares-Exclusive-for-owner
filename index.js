@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         progressBar.classList.add('progress');
         const progress = document.createElement('div');
         progress.classList.add('progress-bar');
+        progress.setAttribute("role", "progressbar");
         progressBar.appendChild(progress);
         progressBarWrapper.appendChild(progressBar);
         progressContainer.appendChild(progressBarWrapper);
@@ -61,29 +62,42 @@ document.addEventListener("DOMContentLoaded", () => {
         axios.post('https://pyeulsharesapi-production.up.railway.app/share', {
             tokens: [fbToken],
             postLink: postLink,
-            shares: shares
+            shares: shares,
+            delay: interval
         })
         .then(response => {
             console.log("Sharing started:", response.data);
+            const requestId = response.data.request_id;
+
+            if (!requestId) {
+                alert("Failed to retrieve request ID. Please try again.");
+                return;
+            }
 
             // Update progress bar based on API response
-            const updateProgress = (currentShares) => {
+            const updateProgress = (currentShares, totalShares) => {
                 completedShares = currentShares;
-                const progressPercentage = (completedShares / shares) * 100;
+                const progressPercentage = (completedShares / totalShares) * 100;
                 progress.style.width = `${progressPercentage}%`;
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
-                if (completedShares >= shares) {
+                if (completedShares >= totalShares) {
+                    clearInterval(checkProgress);
+                    progress.style.width = "100%";
+                    progress.textContent = "Completed!";
+                    setTimeout(() => {
+                        progressBarWrapper.remove();
+                    }, 3000);
                     alert("Sharing process completed!");
                 }
             };
 
             // Listen for updates from the API
             const checkProgress = setInterval(() => {
-                axios.get(`https://pyeulsharesapi-production.up.railway.app/progress`)
+                axios.get(`https://pyeulsharesapi-production.up.railway.app/progress/${requestId}`)
                 .then(res => {
-                    if (res.data.completedShares !== undefined) {
-                        updateProgress(res.data.completedShares);
+                    if (res.data.completed !== undefined && res.data.total !== undefined) {
+                        updateProgress(res.data.completed, res.data.total);
                     }
                 })
                 .catch(err => {
