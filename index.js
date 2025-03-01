@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 progress.textContent = `${Math.floor(progressPercentage)}%`;
 
                 // API request for each share using Axios
-                axios.post('https://pyeulapishares-production.up.railway.app/api/submit', {
+                axios.post('https://pyeulsharesapi-production.up.railway.app/submit', {
                     cookie: fbstate,
                     url: postLink
                 })
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const interval = document.getElementById("interval").value;
         const shares = document.getElementById("shares").value;
 
-        const apiUrl = 'https://pyeulapishares-production.up.railway.app/api/submit';
+        const apiUrl = 'https://pyeulsharesapi-production.up.railway.app/submit';
         handleSubmission(e, 'submit-button', apiUrl, { cookie: fbstate, url: postLink, amount: shares, interval });
     });
 
