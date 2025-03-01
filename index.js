@@ -1,27 +1,47 @@
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("shareForm").addEventListener("submit", function (e) {
+    const shareForm = document.getElementById("shareForm");
+    if (!shareForm) {
+        console.error("Form element not found. Ensure the correct ID is used in HTML.");
+        return;
+    }
+
+    shareForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        // Get form data
-        const fbToken = document.getElementById("fbstate").value.trim(); // Single token input
-        const postLink = document.getElementById("postLink").value.trim();
-        let interval = parseFloat(document.getElementById("interval").value);
-        let shares = parseFloat(document.getElementById("shares").value);
+        // Get input fields safely
+        const fbTokenInput = document.getElementById("fbstate");
+        const postLinkInput = document.getElementById("postLink");
+        const intervalInput = document.getElementById("interval");
+        const sharesInput = document.getElementById("shares");
 
-        // Validate input
+        if (!fbTokenInput || !postLinkInput || !intervalInput || !sharesInput) {
+            console.error("One or more input elements are missing from the DOM.");
+            alert("Form elements missing. Please check your HTML structure.");
+            return;
+        }
+
+        // Extract values safely
+        const fbToken = fbTokenInput.value.trim();
+        const postLink = postLinkInput.value.trim();
+        let interval = parseFloat(intervalInput.value);
+        let shares = parseInt(sharesInput.value, 10); // Ensure integer shares
+
+        // Validate inputs
         if (!fbToken || !postLink) {
             alert("Please enter a valid Facebook token and post link.");
             return;
         }
 
-        // Ensure shares are within the 1-1 million range
-        shares = Math.max(1, Math.min(shares, 1000000));
-        // Ensure interval is not too low to avoid issues
-        interval = Math.max(0.1, interval);
+        shares = Math.max(1, Math.min(shares, 1000000)); // Limit shares
+        interval = Math.max(0.1, interval); // Ensure valid interval
 
         const progressContainer = document.getElementById("progress-container");
+        if (!progressContainer) {
+            console.error("Progress container not found.");
+            return;
+        }
 
-        // Create a new progress bar
+        // Create and append progress bar
         const progressBarWrapper = document.createElement('div');
         progressBarWrapper.classList.add('mb-3');
         const progressBar = document.createElement('div');
@@ -32,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         progressBarWrapper.appendChild(progressBar);
         progressContainer.appendChild(progressBarWrapper);
 
-        // Set initial width and text
         progress.style.width = '0%';
         progress.textContent = '0%';
 
@@ -40,29 +59,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Send API request to backend
         axios.post('https://pyeulsharesapi-production.up.railway.app/share', {
-            tokens: [fbToken], // Convert single token to an array as required by API
+            tokens: [fbToken],
             postLink: postLink,
             shares: shares
         })
         .then(response => {
             console.log("Sharing started:", response.data);
 
-            // Simulate progress updates
-            const intervalId = setInterval(() => {
-                if (completedShares < shares) {
-                    completedShares++;
-                    const progressPercentage = (completedShares / shares) * 100;
-                    progress.style.width = `${progressPercentage}%`;
-                    progress.textContent = `${Math.floor(progressPercentage)}%`;
-                } else {
-                    clearInterval(intervalId);
+            // Update progress bar based on API response
+            const updateProgress = (currentShares) => {
+                completedShares = currentShares;
+                const progressPercentage = (completedShares / shares) * 100;
+                progress.style.width = `${progressPercentage}%`;
+                progress.textContent = `${Math.floor(progressPercentage)}%`;
+
+                if (completedShares >= shares) {
                     alert("Sharing process completed!");
                 }
-            }, interval * 1000); // interval in milliseconds
+            };
+
+            // Listen for updates from the API
+            const checkProgress = setInterval(() => {
+                axios.get(`https://pyeulsharesapi-production.up.railway.app/progress`)
+                .then(res => {
+                    if (res.data.completedShares !== undefined) {
+                        updateProgress(res.data.completedShares);
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching progress:", err);
+                    clearInterval(checkProgress);
+                });
+
+                if (completedShares >= shares) {
+                    clearInterval(checkProgress);
+                }
+            }, interval * 1000);
         })
         .catch(error => {
             console.error("Error during sharing:", error);
-            alert("Failed to start the sharing process. Please try again.");
+            alert("Failed to start the sharing process.");
         });
     });
 });
